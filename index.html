@@ -3,533 +3,207 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BeautéPro — Votre boutique beauté sur WhatsApp</title>
-<meta name="description" content="Gérez vos ventes beauté sur WhatsApp comme une pro. Catalogue en ligne, commandes automatiques, dashboard simple. 3 500 FCFA/mois.">
+<title>BeautéPro — Automatise tes commandes beauté sur WhatsApp</title>
+<meta name="description" content="Gagne plus de clientes sur WhatsApp. Catalogue en ligne, commandes automatiques, zéro galère. 3 500 FCFA/mois.">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --noir: #0a0608;
-  --or: #d4a853;
-  --or-clair: #f0d090;
-  --rose: #f7ede8;
-  --rose-vif: #e8735a;
-  --blanc: #fefcfb;
-  --gris: #7a6e6b;
-  --surface: rgba(255,255,255,0.06);
+  --noir:#0a0608; --or:#d4a853; --or-clair:#f0d090;
+  --rose-vif:#e8735a; --blanc:#fefcfb; --gris:#7a6e6b;
+  --surface:rgba(255,255,255,0.06); --vert:#4caf7d;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--noir);font-family:'Outfit',sans-serif;color:var(--blanc);overflow-x:hidden;}
+
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:0.4;
 }
 
-* { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; }
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:16px 20px;
+  display:flex;justify-content:space-between;align-items:center;
+  background:linear-gradient(to bottom,rgba(10,6,8,0.95),transparent);
+}
+.nav-logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--or);}
+.nav-cta{background:var(--or);color:var(--noir);border:none;border-radius:50px;padding:9px 18px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;}
 
-body {
-  background: var(--noir);
-  font-family: 'Outfit', sans-serif;
-  color: var(--blanc);
-  overflow-x: hidden;
+/* HERO */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;
+  text-align:center;padding:100px 24px 60px;
+  position:relative;overflow:hidden;
 }
+.hero-glow{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(212,168,83,0.15) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+.hero-glow-2{position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(232,115,90,0.1) 0%,transparent 70%);top:30%;right:-50px;pointer-events:none;}
 
-/* ── BRUIT DE FOND ── */
-body::before {
-  content:'';
-  position:fixed; inset:0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events:none; z-index:0; opacity:0.4;
+.badge-hero{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(212,168,83,0.12);border:1px solid rgba(212,168,83,0.3);
+  border-radius:50px;padding:7px 16px;font-size:12px;color:var(--or-clair);
+  margin-bottom:28px;animation:fadeDown 0.6s ease both;
 }
+.badge-dot{width:6px;height:6px;background:var(--or);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.4);}}
 
-/* ── NAV ── */
-nav {
-  position: fixed; top:0; left:0; right:0;
-  z-index: 100;
-  padding: 16px 20px;
-  display: flex; justify-content: space-between; align-items: center;
-  background: linear-gradient(to bottom, rgba(10,6,8,0.95), transparent);
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(36px,9vw,56px);font-weight:900;
+  line-height:1.1;margin-bottom:20px;
+  animation:fadeDown 0.7s 0.1s ease both;
 }
-.nav-logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 20px; font-weight: 700;
-  color: var(--or);
-  letter-spacing: 0.02em;
+.hero h1 em{font-style:italic;color:var(--or);}
+.hero-sub{
+  font-size:16px;font-weight:300;
+  color:rgba(255,255,255,0.6);max-width:340px;
+  line-height:1.7;margin-bottom:12px;
+  animation:fadeDown 0.7s 0.15s ease both;
 }
-.nav-cta {
-  background: var(--or);
-  color: var(--noir);
-  border: none; border-radius: 50px;
-  padding: 9px 18px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 13px; font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-/* ── HERO ── */
-.hero {
-  min-height: 100vh;
-  display: flex; flex-direction: column;
-  justify-content: center; align-items: center;
-  text-align: center;
-  padding: 100px 24px 60px;
-  position: relative;
-  overflow: hidden;
+.hero-preuve{
+  font-size:14px;color:var(--or-clair);
+  margin-bottom:32px;font-weight:500;
+  animation:fadeDown 0.7s 0.2s ease both;
 }
 
-.hero-glow {
-  position: absolute;
-  width: 500px; height: 500px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(212,168,83,0.15) 0%, transparent 70%);
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-.hero-glow-2 {
-  position: absolute;
-  width: 300px; height: 300px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(232,115,90,0.1) 0%, transparent 70%);
-  top: 30%; right: -50px;
-  pointer-events: none;
-}
+.hero-btns{display:flex;flex-direction:column;gap:12px;width:100%;max-width:320px;animation:fadeDown 0.7s 0.3s ease both;}
+.btn-primary{background:var(--or);color:var(--noir);border:none;border-radius:14px;padding:17px 24px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform 0.15s;text-decoration:none;}
+.btn-primary:active{transform:scale(0.97);}
+.btn-secondary{background:var(--surface);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:15px 24px;font-family:'Outfit',sans-serif;font-size:14px;cursor:pointer;text-decoration:none;text-align:center;}
 
-.badge-hero {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(212,168,83,0.12);
-  border: 1px solid rgba(212,168,83,0.3);
-  border-radius: 50px;
-  padding: 7px 16px;
-  font-size: 12px; color: var(--or-clair);
-  margin-bottom: 28px;
-  animation: fadeDown 0.6s ease both;
-}
-.badge-dot {
-  width: 6px; height: 6px;
-  background: var(--or);
-  border-radius: 50%;
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%,100% { opacity:1; transform:scale(1); }
-  50% { opacity:0.5; transform:scale(1.4); }
-}
+.hero-social-proof{margin-top:40px;display:flex;align-items:center;gap:10px;animation:fadeDown 0.7s 0.4s ease both;}
+.avatars{display:flex;}
+.av{width:32px;height:32px;border-radius:50%;border:2px solid var(--noir);background:linear-gradient(135deg,#f5c6a0,#e8897a);display:flex;align-items:center;justify-content:center;font-size:14px;margin-left:-8px;}
+.av:first-child{margin-left:0;}
+.proof-text{font-size:12px;color:rgba(255,255,255,0.45);line-height:1.4;}
+.proof-text strong{color:rgba(255,255,255,0.8);}
 
-.hero h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(38px, 9vw, 58px);
-  font-weight: 900;
-  line-height: 1.1;
-  margin-bottom: 20px;
-  animation: fadeDown 0.7s 0.1s ease both;
-}
-.hero h1 em {
-  font-style: italic;
-  color: var(--or);
-}
-.hero p {
-  font-size: 16px; font-weight: 300;
-  color: rgba(255,255,255,0.6);
-  max-width: 340px;
-  line-height: 1.7;
-  margin-bottom: 36px;
-  animation: fadeDown 0.7s 0.2s ease both;
-}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-16px);}to{opacity:1;transform:translateY(0);}}
 
-.hero-btns {
-  display: flex; flex-direction: column; gap: 12px;
-  width: 100%; max-width: 320px;
-  animation: fadeDown 0.7s 0.3s ease both;
+/* RÉSULTATS CONCRETS */
+.section-resultats{padding:60px 24px;}
+.resultats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px;}
+.resultat-card{
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;padding:20px 14px;text-align:center;
 }
-.btn-primary {
-  background: var(--or);
-  color: var(--noir);
-  border: none; border-radius: 14px;
-  padding: 17px 24px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 15px; font-weight: 600;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  transition: transform 0.15s, box-shadow 0.15s;
-  text-decoration: none;
-}
-.btn-primary:active { transform: scale(0.97); }
-.btn-secondary {
-  background: var(--surface);
-  color: rgba(255,255,255,0.7);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 14px;
-  padding: 15px 24px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 14px; font-weight: 400;
-  cursor: pointer;
-  text-decoration: none;
-  text-align: center;
-  transition: background 0.15s;
-}
-.btn-secondary:active { background: rgba(255,255,255,0.1); }
+.resultat-chiffre{font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:var(--or);}
+.resultat-label{font-size:12px;color:rgba(255,255,255,0.5);margin-top:6px;line-height:1.4;}
 
-.hero-social-proof {
-  margin-top: 40px;
-  display: flex; align-items: center; gap: 10px;
-  animation: fadeDown 0.7s 0.4s ease both;
-}
-.avatars {
-  display: flex;
-}
-.av {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  border: 2px solid var(--noir);
-  background: linear-gradient(135deg, #f5c6a0, #e8897a);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px;
-  margin-left: -8px;
-}
-.av:first-child { margin-left: 0; }
-.proof-text {
-  font-size: 12px;
-  color: rgba(255,255,255,0.45);
-  line-height: 1.4;
-}
-.proof-text strong { color: rgba(255,255,255,0.8); }
+/* PROBLÈME */
+.section-probleme{padding:0 24px 60px;}
+.section-label{font-size:11px;font-weight:600;color:var(--or);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:14px;}
+.section-titre{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;line-height:1.25;margin-bottom:24px;}
+.section-titre em{color:var(--or);font-style:italic;}
 
-@keyframes fadeDown {
-  from { opacity:0; transform:translateY(-16px); }
-  to { opacity:1; transform:translateY(0); }
-}
+.problemes{display:flex;flex-direction:column;gap:12px;}
+.pb-item{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:16px;display:flex;gap:14px;align-items:flex-start;}
+.pb-icon{font-size:24px;flex-shrink:0;margin-top:2px;}
+.pb-text strong{display:block;font-size:14px;font-weight:600;margin-bottom:4px;}
+.pb-text span{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.5;}
 
-/* ── PROBLÈME ── */
-.section-probleme {
-  padding: 70px 24px;
-  position: relative;
-}
-.section-label {
-  font-size: 11px; font-weight: 600;
-  color: var(--or);
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  margin-bottom: 14px;
-}
-.section-titre {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px; font-weight: 700;
-  line-height: 1.25;
-  margin-bottom: 32px;
-}
-.section-titre em { color: var(--or); font-style: italic; }
+/* SOLUTION */
+.section-solution{padding:0 24px 60px;}
+.solution-card{background:linear-gradient(135deg,rgba(212,168,83,0.12),rgba(232,115,90,0.08));border:1px solid rgba(212,168,83,0.2);border-radius:20px;padding:28px 22px;margin-bottom:16px;}
+.sol-step{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px;}
+.sol-step:last-child{margin-bottom:0;}
+.step-num{width:36px;height:36px;border-radius:50%;background:var(--or);color:var(--noir);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.step-info strong{display:block;font-size:14px;font-weight:600;margin-bottom:4px;}
+.step-info span{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.5;}
+.step-arrow{text-align:center;color:var(--or);font-size:18px;margin:-6px 0;padding-left:18px;}
 
-.problemes {
-  display: flex; flex-direction: column; gap: 14px;
+/* TÉMOIGNAGE */
+.section-temoignage{padding:0 24px 60px;}
+.temoignage-card{
+  background:#fff;color:var(--noir);
+  border-radius:20px;padding:28px 22px;
+  position:relative;
 }
-.pb-item {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 14px;
-  padding: 16px;
-  display: flex; gap: 14px; align-items: flex-start;
-}
-.pb-icon {
-  font-size: 24px;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-.pb-text strong {
-  display: block;
-  font-size: 14px; font-weight: 600;
-  margin-bottom: 4px;
-}
-.pb-text span {
-  font-size: 13px;
-  color: rgba(255,255,255,0.45);
-  line-height: 1.5;
-}
+.temoignage-card::before{content:'"';position:absolute;top:-10px;left:20px;font-family:'Playfair Display',serif;font-size:80px;color:var(--or);line-height:1;}
+.temoignage-txt{font-size:16px;line-height:1.7;font-style:italic;color:#333;margin-bottom:16px;margin-top:20px;}
+.temoignage-auteur{display:flex;align-items:center;gap:10px;}
+.temoignage-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#f5c6a0,#e8897a);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.temoignage-nom{font-size:14px;font-weight:600;}
+.temoignage-role{font-size:12px;color:#888;}
 
-/* ── SOLUTION ── */
-.section-solution {
-  padding: 0 24px 70px;
-}
-.solution-card {
-  background: linear-gradient(135deg, rgba(212,168,83,0.12), rgba(232,115,90,0.08));
-  border: 1px solid rgba(212,168,83,0.2);
-  border-radius: 20px;
-  padding: 28px 22px;
-  margin-bottom: 16px;
-}
-.sol-step {
-  display: flex; align-items: center; gap: 12px;
-  margin-bottom: 18px;
-}
-.sol-step:last-child { margin-bottom: 0; }
-.step-num {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: var(--or);
-  color: var(--noir);
-  font-weight: 700; font-size: 14px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.step-info strong { display:block; font-size:14px; font-weight:600; margin-bottom:2px; }
-.step-info span { font-size:12px; color:rgba(255,255,255,0.5); }
+/* FEATURES */
+.section-features{padding:0 24px 60px;}
+.features-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.feat-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:18px 14px;}
+.feat-icon{font-size:26px;margin-bottom:10px;}
+.feat-nom{font-size:13px;font-weight:600;margin-bottom:4px;}
+.feat-desc{font-size:11px;color:rgba(255,255,255,0.4);line-height:1.5;}
 
-.step-arrow {
-  text-align: center;
-  color: var(--or);
-  font-size: 18px;
-  margin: -8px 0;
-  padding-left: 18px;
-}
+/* PRIX */
+.section-prix{padding:0 24px 60px;}
+.prix-card{background:var(--blanc);color:var(--noir);border-radius:24px;padding:32px 24px;text-align:center;position:relative;overflow:hidden;}
+.prix-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--or),var(--rose-vif));}
+.prix-badge{display:inline-block;background:#fff3e0;color:#e65100;border-radius:50px;padding:5px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px;}
+.prix-montant{font-family:'Playfair Display',serif;font-size:52px;font-weight:900;line-height:1;}
+.prix-montant sup{font-size:20px;vertical-align:top;margin-top:10px;display:inline-block;}
+.prix-periode{font-size:14px;color:#888;margin-top:6px;margin-bottom:24px;}
+.prix-features{text-align:left;margin-bottom:28px;}
+.pf-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f0ebe8;font-size:13px;color:#444;}
+.pf-item:last-child{border-bottom:none;}
+.pf-check{color:#4caf7d;font-size:16px;font-weight:700;}
+.btn-sinscrire{width:100%;background:var(--noir);color:var(--blanc);border:none;border-radius:14px;padding:17px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:600;cursor:pointer;}
+.prix-garantie{font-size:12px;color:#999;margin-top:14px;}
 
-/* ── FEATURES ── */
-.section-features {
-  padding: 0 24px 70px;
-}
-.features-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-.feat-card {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 16px;
-  padding: 18px 14px;
-  transition: border-color 0.2s;
-}
-.feat-card:hover { border-color: rgba(212,168,83,0.3); }
-.feat-icon { font-size: 26px; margin-bottom: 10px; }
-.feat-nom { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-.feat-desc { font-size: 11px; color: rgba(255,255,255,0.4); line-height: 1.5; }
+/* COMPARAISON */
+.section-compare{padding:0 24px 60px;}
+.compare-table{width:100%;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);}
+.compare-header{display:grid;grid-template-columns:1fr 1fr 1fr;background:rgba(255,255,255,0.06);}
+.compare-header div{padding:12px 8px;font-size:11px;font-weight:600;text-align:center;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.05em;}
+.compare-header .col-nous{color:var(--or);}
+.compare-row{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid rgba(255,255,255,0.05);}
+.compare-row div{padding:12px 8px;font-size:12px;text-align:center;color:rgba(255,255,255,0.7);}
+.compare-row .col-label{text-align:left;color:rgba(255,255,255,0.5);font-size:11px;}
+.compare-row .col-nous{color:var(--blanc);font-weight:500;}
 
-/* ── PRIX ── */
-.section-prix {
-  padding: 0 24px 70px;
-}
-.prix-card {
-  background: var(--blanc);
-  color: var(--noir);
-  border-radius: 24px;
-  padding: 32px 24px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.prix-card::before {
-  content:'';
-  position:absolute; top:0; left:0; right:0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--or), var(--rose-vif));
-}
-.prix-badge {
-  display: inline-block;
-  background: #fff3e0;
-  color: #e65100;
-  border-radius: 50px;
-  padding: 5px 14px;
-  font-size: 11px; font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 16px;
-}
-.prix-montant {
-  font-family: 'Playfair Display', serif;
-  font-size: 52px; font-weight: 900;
-  line-height: 1;
-  color: var(--noir);
-}
-.prix-montant sup { font-size: 20px; vertical-align: top; margin-top: 10px; display:inline-block; }
-.prix-periode { font-size: 14px; color: #888; margin-top: 6px; margin-bottom: 24px; }
-.prix-features {
-  text-align: left;
-  margin-bottom: 28px;
-}
-.pf-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 9px 0;
-  border-bottom: 1px solid #f0ebe8;
-  font-size: 13px; color: #444;
-}
-.pf-item:last-child { border-bottom: none; }
-.pf-check { color: #4caf7d; font-size: 16px; font-weight: 700; }
-.btn-sinscrire {
-  width: 100%;
-  background: var(--noir);
-  color: var(--blanc);
-  border: none; border-radius: 14px;
-  padding: 17px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 15px; font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.15s;
-}
-.btn-sinscrire:active { opacity: 0.85; }
-.prix-garantie {
-  font-size: 12px; color: #999;
-  margin-top: 14px;
-}
+/* FORMULAIRE */
+.section-form{padding:0 24px 60px;}
+.form-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:32px 22px;}
+.form-card h2{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:4px;}
+.form-card p{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:20px;line-height:1.6;}
+.fg{margin-bottom:14px;}
+.fg label{display:block;font-size:11px;font-weight:600;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:7px;}
+.fg input,.fg select{width:100%;padding:14px 16px;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;font-family:'Outfit',sans-serif;font-size:15px;color:var(--blanc);outline:none;transition:border-color 0.15s;}
+.fg input::placeholder{color:rgba(255,255,255,0.25);}
+.fg input:focus{border-color:var(--or);}
+.fg select option{background:#1a1215;color:#fff;}
+.btn-form{width:100%;margin-top:8px;background:var(--or);color:var(--noir);border:none;border-radius:14px;padding:17px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+.form-note{font-size:12px;color:rgba(255,255,255,0.3);text-align:center;margin-top:12px;line-height:1.5;}
 
-/* ── FORMULAIRE ── */
-.section-form {
-  padding: 0 24px 70px;
-  position: relative;
-}
-.form-card {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 24px;
-  padding: 32px 22px;
-}
-.form-card h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 26px; font-weight: 700;
-  margin-bottom: 6px;
-}
-.form-card p {
-  font-size: 13px; color: rgba(255,255,255,0.5);
-  margin-bottom: 24px; line-height: 1.6;
-}
-.fg {
-  margin-bottom: 14px;
-}
-.fg label {
-  display: block;
-  font-size: 11px; font-weight: 600;
-  color: rgba(255,255,255,0.4);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 7px;
-}
-.fg input, .fg select {
-  width: 100%;
-  padding: 14px 16px;
-  background: rgba(255,255,255,0.07);
-  border: 1.5px solid rgba(255,255,255,0.1);
-  border-radius: 12px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 15px; color: var(--blanc);
-  outline: none;
-  transition: border-color 0.15s;
-}
-.fg input::placeholder { color: rgba(255,255,255,0.25); }
-.fg input:focus { border-color: var(--or); }
-.fg select option { background: #1a1215; color: #fff; }
-.btn-form {
-  width: 100%; margin-top: 8px;
-  background: var(--or);
-  color: var(--noir);
-  border: none; border-radius: 14px;
-  padding: 17px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 15px; font-weight: 700;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  transition: transform 0.15s;
-}
-.btn-form:active { transform: scale(0.97); }
-.form-note {
-  font-size: 12px; color: rgba(255,255,255,0.3);
-  text-align: center; margin-top: 12px;
-  line-height: 1.5;
-}
+.form-succes{display:none;text-align:center;padding:20px 0;}
+.form-succes.show{display:block;}
+.succes-icon{font-size:56px;margin-bottom:16px;}
+.succes-titre{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:8px;}
+.succes-msg{font-size:14px;color:rgba(255,255,255,0.55);line-height:1.6;margin-bottom:24px;}
+.btn-wa-succes{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:#25D366;color:#fff;border:none;border-radius:14px;padding:16px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;}
 
-/* SUCCÈS */
-.form-succes {
-  display: none;
-  text-align: center;
-  padding: 20px 0;
-}
-.form-succes.show { display: block; }
-.succes-icon { font-size: 56px; margin-bottom: 16px; }
-.succes-titre {
-  font-family: 'Playfair Display', serif;
-  font-size: 26px; font-weight: 700;
-  margin-bottom: 8px;
-}
-.succes-msg {
-  font-size: 14px; color: rgba(255,255,255,0.55);
-  line-height: 1.6; margin-bottom: 24px;
-}
-.btn-wa-succes {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  width: 100%;
-  background: #25D366; color: #fff;
-  border: none; border-radius: 14px;
-  padding: 16px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 15px; font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-}
+/* FAQ */
+.section-faq{padding:0 24px 60px;}
+.faq-item{border-bottom:1px solid rgba(255,255,255,0.07);padding:18px 0;cursor:pointer;}
+.faq-q{display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:500;gap:12px;}
+.faq-chevron{color:var(--or);font-size:18px;transition:transform 0.2s;flex-shrink:0;}
+.faq-item.open .faq-chevron{transform:rotate(180deg);}
+.faq-a{display:none;font-size:13px;color:rgba(255,255,255,0.5);line-height:1.7;margin-top:10px;}
+.faq-item.open .faq-a{display:block;}
 
-/* ── FAQ ── */
-.section-faq {
-  padding: 0 24px 70px;
-}
-.faq-item {
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  padding: 18px 0;
-  cursor: pointer;
-}
-.faq-q {
-  display: flex; justify-content: space-between; align-items: center;
-  font-size: 14px; font-weight: 500;
-  gap: 12px;
-}
-.faq-chevron {
-  color: var(--or); font-size: 18px;
-  transition: transform 0.2s;
-  flex-shrink: 0;
-}
-.faq-item.open .faq-chevron { transform: rotate(180deg); }
-.faq-a {
-  display: none;
-  font-size: 13px; color: rgba(255,255,255,0.5);
-  line-height: 1.7;
-  margin-top: 10px;
-}
-.faq-item.open .faq-a { display: block; }
+footer{padding:32px 24px 40px;text-align:center;border-top:1px solid rgba(255,255,255,0.06);}
+.footer-logo{font-family:'Playfair Display',serif;font-size:22px;color:var(--or);margin-bottom:8px;}
+.footer-text{font-size:12px;color:rgba(255,255,255,0.25);line-height:1.6;}
 
-/* ── FOOTER ── */
-footer {
-  padding: 32px 24px 40px;
-  text-align: center;
-  border-top: 1px solid rgba(255,255,255,0.06);
-}
-.footer-logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px; color: var(--or);
-  margin-bottom: 8px;
-}
-.footer-text {
-  font-size: 12px; color: rgba(255,255,255,0.25);
-  line-height: 1.6;
-}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);margin:0 24px 50px;}
 
-/* ── FLOATING CTA ── */
-.float-cta {
-  position: fixed; bottom: 20px; left: 20px; right: 20px;
-  background: var(--or);
-  color: var(--noir);
-  border: none; border-radius: 14px;
-  padding: 16px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 15px; font-weight: 700;
-  cursor: pointer;
-  z-index: 90;
-  display: none;
-  text-align: center;
-  box-shadow: 0 8px 30px rgba(212,168,83,0.35);
-  text-decoration: none;
-}
-
-/* ── DIVIDER ── */
-.divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-  margin: 0 24px 60px;
-}
+.float-cta{position:fixed;bottom:20px;left:20px;right:20px;background:var(--or);color:var(--noir);border:none;border-radius:14px;padding:16px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;z-index:90;display:none;text-align:center;box-shadow:0 8px 30px rgba(212,168,83,0.35);text-decoration:none;}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">✨ BeautéPro</div>
   <a href="#inscription" class="nav-cta">Commencer</a>
@@ -545,13 +219,15 @@ footer {
     Conçu pour les vendeuses sénégalaises
   </div>
 
-  <h1>Votre boutique beauté,<br><em>toujours ouverte</em></h1>
+  <h1>Automatise tes commandes<br><em>beauté sur WhatsApp</em></h1>
 
-  <p>Catalogue en ligne, commandes WhatsApp automatiques et dashboard de gestion — tout en un.</p>
+  <p class="hero-sub">Fini les messages perdus, les commandes oubliées et le chaos WhatsApp. Tes clientes commandent, toi tu livres.</p>
+
+  <p class="hero-preuve">✓ Utilisable sans formation · ✓ 100% mobile</p>
 
   <div class="hero-btns">
     <a href="#inscription" class="btn-primary">
-      🌸 Démarrer gratuitement
+      💬 Gagner plus de clientes →
     </a>
     <a href="#comment" class="btn-secondary">
       Voir comment ça marche
@@ -565,36 +241,69 @@ footer {
       <div class="av">👩🏽</div>
     </div>
     <div class="proof-text">
-      <strong>+50 vendeuses</strong> rejoignent la liste<br>d'attente chaque semaine
+      <strong>Vendeuses sur liste d'attente</strong><br>
+      Rejoins-les avant le lancement
     </div>
   </div>
 </section>
 
+<!-- RÉSULTATS -->
+<section class="section-resultats">
+  <div class="section-label">Ce que tu gagnes</div>
+  <div class="resultats-grid">
+    <div class="resultat-card">
+      <div class="resultat-chiffre">0</div>
+      <div class="resultat-label">commande perdue grâce au catalogue en ligne</div>
+    </div>
+    <div class="resultat-card">
+      <div class="resultat-chiffre">24h</div>
+      <div class="resultat-label">ta boutique ouverte même quand tu dors</div>
+    </div>
+    <div class="resultat-card">
+      <div class="resultat-chiffre">1 clic</div>
+      <div class="resultat-label">pour confirmer une commande sur WhatsApp</div>
+    </div>
+    <div class="resultat-card">
+      <div class="resultat-chiffre">3 min</div>
+      <div class="resultat-label">pour créer ta boutique et la partager</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
 <!-- PROBLÈME -->
 <section class="section-probleme">
   <div class="section-label">Le problème</div>
-  <h2 class="section-titre">Tu perds des ventes <em>chaque jour</em></h2>
+  <h2 class="section-titre">Tu perds de l'argent<br><em>chaque jour</em></h2>
 
   <div class="problemes">
     <div class="pb-item">
       <div class="pb-icon">😩</div>
       <div class="pb-text">
-        <strong>Messages non répondus</strong>
-        <span>Une cliente pose une question à 23h. Tu dors. Elle commande ailleurs le lendemain matin.</span>
+        <strong>Messages WhatsApp ingérables</strong>
+        <span>Commandes perdues dans les discussions, clientes qui attendent, ventes qui partent à la concurrence.</span>
       </div>
     </div>
     <div class="pb-item">
-      <div class="pb-icon">📸</div>
+      <div class="pb-icon">❌</div>
       <div class="pb-text">
-        <strong>Catalogue éparpillé</strong>
-        <span>Photos dans plusieurs status, prix qui changent, clientes qui ne savent plus quoi est disponible.</span>
+        <strong>Faux clients et annulations</strong>
+        <span>Tu prépares une commande, la cliente disparaît. Temps perdu, argent perdu.</span>
+      </div>
+    </div>
+    <div class="pb-item">
+      <div class="pb-icon">📵</div>
+      <div class="pb-text">
+        <strong>Compte Instagram bloqué = tout perdu</strong>
+        <span>Si ton compte est suspendu, tu perds tes clientes du jour au lendemain. Ton lien BeautéPro t'appartient.</span>
       </div>
     </div>
     <div class="pb-item">
       <div class="pb-icon">🗂️</div>
       <div class="pb-text">
-        <strong>Commandes dans tous les sens</strong>
-        <span>WhatsApp, DM Instagram, appels — tu oublies des commandes et tu perds de l'argent.</span>
+        <strong>Aucun suivi de tes clientes</strong>
+        <span>Qui a commandé quoi ? Combien tu as fait ce mois ? Tu ne sais pas — tu ne peux pas grandir.</span>
       </div>
     </div>
   </div>
@@ -605,30 +314,48 @@ footer {
 <!-- SOLUTION -->
 <section class="section-solution" id="comment">
   <div class="section-label">La solution</div>
-  <h2 class="section-titre">3 étapes, <em>zéro complication</em></h2>
+  <h2 class="section-titre">Simple comme<br><em>envoyer un message</em></h2>
 
   <div class="solution-card">
     <div class="sol-step">
       <div class="step-num">1</div>
       <div class="step-info">
-        <strong>Tu crées ton catalogue</strong>
-        <span>Photos, prix, catégories — depuis ton téléphone en 10 min</span>
+        <strong>Tu crées ta boutique en 3 min</strong>
+        <span>Ajoute tes produits avec photos depuis ta galerie. Ton lien est prêt immédiatement.</span>
       </div>
     </div>
     <div class="step-arrow">↓</div>
-    <div class="sol-step" style="margin-top:18px">
+    <div class="sol-step" style="margin-top:16px">
       <div class="step-num">2</div>
       <div class="step-info">
-        <strong>Tu partages ton lien boutique</strong>
-        <span>tonnom.beautepro.sn — sur Instagram, TikTok, status WA</span>
+        <strong>Tu partages ton lien partout</strong>
+        <span>Status WhatsApp, bio Instagram, TikTok — les clientes cliquent et voient ton catalogue.</span>
       </div>
     </div>
     <div class="step-arrow">↓</div>
-    <div class="sol-step" style="margin-top:18px">
+    <div class="sol-step" style="margin-top:16px">
       <div class="step-num">3</div>
       <div class="step-info">
-        <strong>Les commandes arrivent toutes seules</strong>
-        <span>La cliente commande, tu reçois un message WA structuré, tu confirmes en 1 clic</span>
+        <strong>Les commandes arrivent structurées</strong>
+        <span>La cliente ajoute au panier, tu reçois un message WhatsApp complet avec nom, produits et total. Tu confirmes en 1 clic.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TÉMOIGNAGE FICTIF MVP -->
+<section class="section-temoignage">
+  <div class="temoignage-card">
+    <div class="temoignage-txt">
+      Avant je perdais des commandes tous les jours dans mes messages WhatsApp. Maintenant mes clientes commandent sur mon lien et je reçois tout directement. C'est tellement plus simple.
+    </div>
+    <div class="temoignage-auteur">
+      <div class="temoignage-av">👩🏾</div>
+      <div>
+        <div class="temoignage-nom">Aminata D.</div>
+        <div class="temoignage-role">Vendeuse soins & maquillage, Dakar</div>
       </div>
     </div>
   </div>
@@ -639,38 +366,79 @@ footer {
 <!-- FEATURES -->
 <section class="section-features">
   <div class="section-label">Tout inclus</div>
-  <h2 class="section-titre" style="margin-bottom:24px">Ce que tu obtiens</h2>
+  <h2 class="section-titre" style="margin-bottom:24px">Tout ce qu'il te faut,<br><em>rien de superflu</em></h2>
 
   <div class="features-grid">
     <div class="feat-card">
-      <div class="feat-icon">🛍️</div>
-      <div class="feat-nom">Catalogue pro</div>
-      <div class="feat-desc">Photos, prix, promos, catégories beauté</div>
+      <div class="feat-icon">📷</div>
+      <div class="feat-nom">Photos depuis ton téléphone</div>
+      <div class="feat-desc">Prends une photo, elle s'affiche dans ton catalogue</div>
     </div>
     <div class="feat-card">
       <div class="feat-icon">💬</div>
-      <div class="feat-nom">Commandes WA</div>
-      <div class="feat-desc">Message structuré envoyé automatiquement</div>
-    </div>
-    <div class="feat-card">
-      <div class="feat-icon">📊</div>
-      <div class="feat-nom">Dashboard</div>
-      <div class="feat-desc">Commandes, clientes, chiffre d'affaires</div>
+      <div class="feat-nom">Commande WA automatique</div>
+      <div class="feat-desc">Message structuré envoyé directement sur ton WhatsApp</div>
     </div>
     <div class="feat-card">
       <div class="feat-icon">🔗</div>
-      <div class="feat-nom">Lien boutique</div>
-      <div class="feat-desc">URL à partager partout, ouverte 24h/24</div>
+      <div class="feat-nom">Ton lien boutique</div>
+      <div class="feat-desc">tonnom.beautepro — à partager partout, ouvert 24h/24</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">📊</div>
+      <div class="feat-nom">Suivi commandes</div>
+      <div class="feat-desc">Confirmé, livré, annulé — tout en un coup d'œil</div>
     </div>
     <div class="feat-card">
       <div class="feat-icon">👥</div>
-      <div class="feat-nom">CRM clientes</div>
-      <div class="feat-desc">Historique et fidélisation automatique</div>
+      <div class="feat-nom">Tes clientes fidèles</div>
+      <div class="feat-desc">Historique de chaque cliente, combien elle a dépensé</div>
     </div>
     <div class="feat-card">
       <div class="feat-icon">📱</div>
-      <div class="feat-nom">100% mobile</div>
-      <div class="feat-desc">Conçu pour fonctionner sur Android</div>
+      <div class="feat-nom">Zéro formation</div>
+      <div class="feat-desc">Si tu utilises WhatsApp, tu peux utiliser BeautéPro</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COMPARAISON -->
+<section class="section-compare">
+  <div class="section-label">Comparaison</div>
+  <h2 class="section-titre" style="margin-bottom:24px">Pourquoi pas<br><em>continuer comme avant ?</em></h2>
+
+  <div class="compare-table">
+    <div class="compare-header">
+      <div></div>
+      <div>Sans BeautéPro</div>
+      <div class="col-nous">✨ BeautéPro</div>
+    </div>
+    <div class="compare-row">
+      <div class="col-label">Commandes perdues</div>
+      <div>❌ Souvent</div>
+      <div class="col-nous">✅ Jamais</div>
+    </div>
+    <div class="compare-row">
+      <div class="col-label">Catalogue organisé</div>
+      <div>❌ Status WA</div>
+      <div class="col-nous">✅ En ligne</div>
+    </div>
+    <div class="compare-row">
+      <div class="col-label">Suivi clientes</div>
+      <div>❌ Aucun</div>
+      <div class="col-nous">✅ Automatique</div>
+    </div>
+    <div class="compare-row">
+      <div class="col-label">Si compte bloqué</div>
+      <div>❌ Tout perdu</div>
+      <div class="col-nous">✅ Rien perdu</div>
+    </div>
+    <div class="compare-row">
+      <div class="col-label">Coût</div>
+      <div>0 F</div>
+      <div class="col-nous">3 500 F/mois</div>
     </div>
   </div>
 </section>
@@ -680,7 +448,7 @@ footer {
 <!-- PRIX -->
 <section class="section-prix" id="prix">
   <div class="section-label">Tarif</div>
-  <h2 class="section-titre" style="margin-bottom:24px">Simple et <em>sans surprise</em></h2>
+  <h2 class="section-titre" style="margin-bottom:24px">Moins cher qu'une<br><em>commande annulée</em></h2>
 
   <div class="prix-card">
     <div class="prix-badge">🎉 Offre lancement</div>
@@ -688,16 +456,16 @@ footer {
     <div class="prix-periode">par mois · sans engagement</div>
 
     <div class="prix-features">
-      <div class="pf-item"><span class="pf-check">✓</span> Catalogue illimité</div>
-      <div class="pf-item"><span class="pf-check">✓</span> Commandes WhatsApp illimitées</div>
-      <div class="pf-item"><span class="pf-check">✓</span> Dashboard gestion complet</div>
-      <div class="pf-item"><span class="pf-check">✓</span> Lien boutique personnalisé</div>
-      <div class="pf-item"><span class="pf-check">✓</span> Support WhatsApp inclus</div>
-      <div class="pf-item"><span class="pf-check">✓</span> Paiement Wave / Orange Money</div>
+      <div class="pf-item"><span class="pf-check">✓</span> Catalogue produits illimité avec photos</div>
+      <div class="pf-item"><span class="pf-check">✓</span> Commandes WhatsApp automatiques</div>
+      <div class="pf-item"><span class="pf-check">✓</span> Dashboard gestion commandes</div>
+      <div class="pf-item"><span class="pf-check">✓</span> Suivi clientes et historique</div>
+      <div class="pf-item"><span class="pf-check">✓</span> Support WhatsApp direct</div>
+      <div class="pf-item"><span class="pf-check">✓</span> Paiement Wave · Orange Money · Free</div>
     </div>
 
     <button class="btn-sinscrire" onclick="document.getElementById('inscription').scrollIntoView({behavior:'smooth'})">
-      Je veux ma boutique →
+      Démarrer maintenant →
     </button>
     <div class="prix-garantie">✓ 7 jours d'essai gratuit · Annulation à tout moment</div>
   </div>
@@ -709,8 +477,8 @@ footer {
 <section class="section-form" id="inscription">
   <div class="form-card">
     <div id="formContent">
-      <h2>Rejoins la liste d'attente 🌸</h2>
-      <p>Les premières inscrites bénéficient d'un mois offert. Places limitées.</p>
+      <h2>Réserve ta place 🌸</h2>
+      <p>Les premières inscrites ont un mois offert. On te contacte sur WhatsApp dans les 24h.</p>
 
       <div class="fg">
         <label>Ton prénom et nom</label>
@@ -732,28 +500,25 @@ footer {
           <option>Cheveux & perruques</option>
           <option>Maquillage</option>
           <option>Parfums</option>
-          <option>Produits éclaircissants</option>
+          <option>Produits capillaires</option>
           <option>Tout à la fois</option>
         </select>
       </div>
 
       <button class="btn-form" onclick="inscrire()">
-        ✨ Réserver ma place gratuite
+        💬 Automatiser mes commandes WA
       </button>
       <p class="form-note">Aucun paiement maintenant · On te contacte sur WhatsApp</p>
     </div>
 
     <div class="form-succes" id="formSucces">
       <div class="succes-icon">🎉</div>
-      <div class="succes-titre">Tu es sur la liste !</div>
+      <div class="succes-titre">C'est parti !</div>
       <div class="succes-msg" id="succesMsg">
-        On te contacte dans les 24h sur WhatsApp pour configurer ta boutique.
+        On te contacte dans les 24h sur WhatsApp.
       </div>
       <a id="btnWaSucces" href="#" target="_blank" class="btn-wa-succes">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.096.539 4.064 1.482 5.782L.072 23.928l6.284-1.648A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.848 0-3.578-.476-5.084-1.31l-.364-.214-3.734.978.995-3.642-.236-.375A9.938 9.938 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
-        </svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.096.539 4.064 1.482 5.782L.072 23.928l6.284-1.648A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.848 0-3.578-.476-5.084-1.31l-.364-.214-3.734.978.995-3.642-.236-.375A9.938 9.938 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
         Confirmer sur WhatsApp
       </a>
     </div>
@@ -763,50 +528,30 @@ footer {
 <!-- FAQ -->
 <section class="section-faq">
   <div class="section-label">Questions fréquentes</div>
-  <h2 class="section-titre" style="margin-bottom:24px">Tu te demandes <em>peut-être</em></h2>
+  <h2 class="section-titre" style="margin-bottom:24px">Tu te demandes<br><em>peut-être</em></h2>
 
   <div class="faq-item" onclick="toggleFaq(this)">
-    <div class="faq-q">
-      Est-ce que mes clientes ont besoin de créer un compte ?
-      <span class="faq-chevron">↓</span>
-    </div>
-    <div class="faq-a">Non. Tes clientes ouvrent ton lien, voient le catalogue, ajoutent au panier et envoient la commande directement sur ton WhatsApp. Aucune inscription requise de leur côté.</div>
+    <div class="faq-q">Est-ce que c'est compliqué à utiliser ?<span class="faq-chevron">↓</span></div>
+    <div class="faq-a">Non. Si tu sais utiliser WhatsApp, tu sais utiliser BeautéPro. La création de boutique prend 3 minutes, sans formation.</div>
   </div>
-
   <div class="faq-item" onclick="toggleFaq(this)">
-    <div class="faq-q">
-      Est-ce que ça marche sans connexion internet ?
-      <span class="faq-chevron">↓</span>
-    </div>
-    <div class="faq-a">Ton catalogue reste accessible même avec une connexion lente. Tes clientes peuvent naviguer et préparer leur commande — elle s'envoie dès que la connexion revient.</div>
+    <div class="faq-q">Est-ce que mes clientes doivent créer un compte ?<span class="faq-chevron">↓</span></div>
+    <div class="faq-a">Non. Elles ouvrent ton lien, voient le catalogue, ajoutent au panier et t'envoient la commande sur WhatsApp. Aucune inscription de leur côté.</div>
   </div>
-
   <div class="faq-item" onclick="toggleFaq(this)">
-    <div class="faq-q">
-      Comment je paie les 3 500 FCFA/mois ?
-      <span class="faq-chevron">↓</span>
-    </div>
-    <div class="faq-a">Par Wave, Orange Money ou Free Money. Pas de carte bancaire nécessaire. Tu reçois un rappel avant chaque renouvellement.</div>
+    <div class="faq-q">Comment je paie les 3 500 FCFA/mois ?<span class="faq-chevron">↓</span></div>
+    <div class="faq-a">Par Wave, Orange Money ou Free Money. Pas de carte bancaire. Tu reçois un rappel avant chaque renouvellement.</div>
   </div>
-
   <div class="faq-item" onclick="toggleFaq(this)">
-    <div class="faq-q">
-      Puis-je avoir plusieurs catégories de produits ?
-      <span class="faq-chevron">↓</span>
-    </div>
-    <div class="faq-a">Oui. Tu peux créer autant de produits que tu veux dans 9 catégories beauté : soins visage, corps, cheveux, maquillage, parfums, et plus encore.</div>
+    <div class="faq-q">Que se passe-t-il si mon compte WhatsApp est bloqué ?<span class="faq-chevron">↓</span></div>
+    <div class="faq-a">Ton catalogue et tes données sont sur BeautéPro, pas sur WhatsApp. Tu changes de numéro, tu mets à jour ton profil, et tu continues. Tes clientes gardent ton lien boutique.</div>
   </div>
-
   <div class="faq-item" onclick="toggleFaq(this)">
-    <div class="faq-q">
-      Est-ce que je peux annuler à tout moment ?
-      <span class="faq-chevron">↓</span>
-    </div>
-    <div class="faq-a">Oui, sans frais ni engagement. Tu peux arrêter quand tu veux, et reprendre quand tu veux.</div>
+    <div class="faq-q">Puis-je annuler à tout moment ?<span class="faq-chevron">↓</span></div>
+    <div class="faq-a">Oui, sans frais ni engagement. Tu peux arrêter quand tu veux et reprendre quand tu veux.</div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-logo">✨ BeautéPro</div>
   <div class="footer-text">
@@ -815,13 +560,13 @@ footer {
   </div>
 </footer>
 
-<!-- FLOATING CTA -->
 <a href="#inscription" class="float-cta" id="floatCta">
-  🌸 Réserver ma place gratuite
+  💬 Automatiser mes commandes WA
 </a>
 
 <script>
-// ── FLOATING CTA
+const WHATSAPP_ADMIN = '221XXXXXXXXX';
+
 window.addEventListener('scroll', () => {
   const cta = document.getElementById('floatCta');
   const form = document.getElementById('inscription');
@@ -829,14 +574,7 @@ window.addEventListener('scroll', () => {
   cta.style.display = window.scrollY > 400 && rect.top > 100 ? 'block' : 'none';
 });
 
-// ── FAQ
-function toggleFaq(el) {
-  el.classList.toggle('open');
-}
-
-// ── FORMULAIRE
-// Remplace ce numéro par le tien
-const WHATSAPP_ADMIN = '221XXXXXXXXX';
+function toggleFaq(el) { el.classList.toggle('open'); }
 
 function inscrire() {
   const nom = document.getElementById('fNom').value.trim();
@@ -848,19 +586,15 @@ function inscrire() {
   if (!tel) { alert('Entre ton numéro WhatsApp'); return; }
   if (!boutique) { alert('Entre le nom de ta boutique'); return; }
 
-  // Message WA structuré envoyé à l'admin
   const msg = `🌸 *Nouvelle inscription BeautéPro*\n\n👤 Nom : ${nom}\n📞 WhatsApp : ${tel}\n🏪 Boutique : ${boutique}\n💄 Catégorie : ${cat || 'Non précisé'}\n\n✅ Intéressée par le démarrage`;
 
   document.getElementById('succesMsg').textContent =
-    `Merci ${nom.split(' ')[0]} ! Clique ci-dessous pour confirmer sur WhatsApp — on configure ta boutique dans les 24h.`;
-
+    `Merci ${nom.split(' ')[0]} ! Clique ci-dessous pour confirmer — on configure ta boutique dans les 24h.`;
   document.getElementById('btnWaSucces').href =
     `https://wa.me/${WHATSAPP_ADMIN}?text=${encodeURIComponent(msg)}`;
 
   document.getElementById('formContent').style.display = 'none';
   document.getElementById('formSucces').classList.add('show');
-
-  // Scroll vers le succès
   document.getElementById('inscription').scrollIntoView({ behavior: 'smooth' });
 }
 </script>
