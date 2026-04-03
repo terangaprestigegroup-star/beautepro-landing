@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fatou Beauté — Boutique en ligne</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --noir:#0e0b0d; --or:#c9a96e; --rose:#f5e6e0;
+  --rose-fort:#d4856a; --blanc:#fdfaf8; --gris:#6b6068;
+  --vert:#4caf7d; --surface:#fff; --border:#ede5e0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--blanc);font-family:'DM Sans',sans-serif;color:var(--noir);}
+
+/* DEMO BANNER */
+.demo-banner{
+  background:linear-gradient(135deg,#c2185b,#e91e8c);
+  color:#fff;text-align:center;padding:10px 16px;
+  font-size:13px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.demo-banner a{color:#fff;text-decoration:underline;}
+
+/* HEADER */
+.header{
+  background:var(--noir);padding:24px 20px 18px;
+  text-align:center;position:relative;overflow:hidden;
+}
+.header::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(201,169,110,0.18) 0%,transparent 70%);
+}
+.boutique-avatar{
+  width:72px;height:72px;border-radius:50%;
+  border:2px solid var(--or);
+  background:linear-gradient(135deg,#f5c6a0,#e8897a);
+  display:flex;align-items:center;justify-content:center;
+  font-size:30px;margin:0 auto 12px;position:relative;z-index:1;
+}
+.boutique-nom{
+  font-family:'Cormorant Garamond',serif;
+  font-size:26px;font-weight:600;color:var(--blanc);
+  position:relative;z-index:1;
+}
+.boutique-desc{
+  font-size:13px;color:rgba(255,255,255,0.5);
+  margin-top:6px;position:relative;z-index:1;
+}
+.badge-wa{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(76,175,125,0.15);border:1px solid rgba(76,175,125,0.3);
+  color:var(--vert);border-radius:20px;padding:6px 12px;
+  font-size:12px;margin-top:12px;cursor:pointer;
+  text-decoration:none;position:relative;z-index:1;
+}
+
+/* FILTRES */
+.filtres{
+  display:flex;gap:8px;padding:14px 14px 0;
+  overflow-x:auto;scrollbar-width:none;
+}
+.filtres::-webkit-scrollbar{display:none;}
+.filtre{
+  background:none;border:1.5px solid var(--border);
+  border-radius:20px;padding:7px 14px;
+  font-family:'DM Sans',sans-serif;font-size:12px;
+  color:var(--gris);cursor:pointer;white-space:nowrap;
+  transition:all 0.15s;
+}
+.filtre.actif{background:var(--noir);border-color:var(--noir);color:var(--blanc);}
+
+/* GRILLE */
+.grille{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:12px;padding:12px 12px 100px;
+}
+.carte{
+  background:#fff;border-radius:14px;overflow:hidden;
+  box-shadow:0 2px 12px rgba(14,11,13,0.07);
+  cursor:pointer;transition:transform 0.15s;
+}
+.carte:active{transform:scale(0.97);}
+.carte-img{
+  height:140px;display:flex;align-items:center;
+  justify-content:center;font-size:44px;
+  position:relative;overflow:hidden;
+}
+.carte-img img{
+  width:100%;height:100%;object-fit:cover;
+  position:absolute;inset:0;
+}
+.promo{
+  position:absolute;top:8px;left:8px;
+  background:var(--rose-fort);color:#fff;
+  border-radius:6px;padding:3px 8px;font-size:10px;font-weight:600;
+}
+.carte-body{padding:11px;}
+.carte-cat{font-size:10px;color:var(--or);text-transform:uppercase;letter-spacing:0.08em;font-weight:500;}
+.carte-nom{
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px;font-weight:600;line-height:1.3;
+  margin:3px 0 7px;
+}
+.carte-prix{display:flex;align-items:baseline;gap:5px;}
+.prix-actuel{font-size:15px;font-weight:700;}
+.prix-barre{font-size:11px;color:#bbb;text-decoration:line-through;}
+.btn-ajouter{
+  width:100%;margin-top:9px;
+  background:var(--noir);color:var(--blanc);
+  border:none;border-radius:8px;padding:9px;
+  font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;
+  transition:background 0.15s;
+}
+.btn-ajouter.ajoute{background:var(--vert);}
+
+/* PANIER */
+.panier-btn{
+  position:fixed;bottom:20px;right:20px;
+  background:var(--rose-fort);color:#fff;
+  border:none;border-radius:50px;
+  padding:13px 18px;font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:500;cursor:pointer;
+  display:none;align-items:center;gap:8px;
+  box-shadow:0 4px 20px rgba(212,133,106,0.45);z-index:100;
+}
+.panier-count{
+  background:#fff;color:var(--rose-fort);
+  border-radius:50%;width:22px;height:22px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;
+}
+
+/* OVERLAY */
+.overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(14,11,13,0.7);z-index:200;align-items:flex-end;
+}
+.overlay.open{display:flex;}
+.modal{
+  background:#fff;width:100%;border-radius:22px 22px 0 0;
+  padding:24px 20px 40px;max-height:90vh;overflow-y:auto;
+  animation:slideUp 0.3s ease;
+}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.modal-titre{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:600;margin-bottom:4px;
+}
+.modal-sous{font-size:13px;color:var(--gris);margin-bottom:18px;}
+.panier-item{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 0;border-bottom:1px solid #f0e8e4;
+}
+.pi-emoji{font-size:28px;width:44px;text-align:center;}
+.pi-info{flex:1;}
+.pi-nom{font-size:13px;font-weight:500;}
+.pi-prix{font-size:12px;color:var(--gris);}
+.pi-ctrl{display:flex;align-items:center;gap:10px;}
+.pi-ctrl button{
+  width:28px;height:28px;border:1.5px solid #e0d8d4;
+  background:none;border-radius:50%;font-size:16px;cursor:pointer;
+}
+.pi-qty{font-weight:600;min-width:20px;text-align:center;}
+.total-ligne{
+  display:flex;justify-content:space-between;
+  padding:16px 0 0;font-weight:600;font-size:16px;
+}
+.fg{margin-top:14px;}
+.fg label{
+  display:block;font-size:11px;color:var(--gris);
+  text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;
+}
+.fg input,.fg textarea{
+  width:100%;padding:12px 14px;
+  border:1.5px solid var(--border);border-radius:10px;
+  font-family:'DM Sans',sans-serif;font-size:14px;outline:none;
+  background:#fdfaf8;transition:border-color 0.15s;
+}
+.fg input:focus{border-color:var(--or);}
+.fg textarea{resize:none;height:60px;}
+.btn-commander{
+  width:100%;margin-top:18px;
+  background:var(--noir);color:var(--blanc);
+  border:none;border-radius:12px;padding:16px;
+  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;
+  cursor:pointer;display:flex;align-items:center;
+  justify-content:center;gap:8px;
+}
+.btn-annuler{
+  width:100%;margin-top:8px;background:none;border:none;
+  color:var(--gris);font-family:'DM Sans',sans-serif;
+  font-size:13px;cursor:pointer;padding:8px;
+}
+
+/* SUCCÈS */
+.succes{display:none;text-align:center;padding:20px 0;}
+.succes.show{display:block;}
+.succes-icon{font-size:52px;margin-bottom:14px;}
+.succes-titre{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;margin-bottom:6px;}
+.succes-ref{background:var(--rose);border-radius:8px;padding:12px;font-size:13px;color:var(--gris);margin:14px 0;}
+.succes-ref span{font-weight:700;color:var(--noir);}
+.btn-wa-confirm{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:15px;background:#25D366;color:#fff;
+  border:none;border-radius:12px;font-family:'DM Sans',sans-serif;
+  font-size:14px;font-weight:600;cursor:pointer;text-decoration:none;
+}
+.btn-retour{
+  width:100%;margin-top:10px;background:none;border:none;
+  color:var(--gris);font-family:'DM Sans',sans-serif;
+  font-size:13px;cursor:pointer;
+}
+
+.empty{text-align:center;padding:50px 20px;color:var(--gris);}
+</style>
+</head>
+<body>
+
+<!-- BANNIÈRE DEMO -->
+<div class="demo-banner">
+  🎯 Ceci est une démo BeautéPro · <a href="https://terangaprestigegroup-star.github.io/beautepro-landing/#inscription">Créer ma boutique gratuitement →</a>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="boutique-avatar">👩🏾</div>
+  <div class="boutique-nom">Fatou Beauté</div>
+  <div class="boutique-desc">Soins naturels · Maquillage pro · Livraison Dakar</div>
+  <a class="badge-wa" href="#">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="#4caf7d"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.096.539 4.064 1.482 5.782L.072 23.928l6.284-1.648A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.848 0-3.578-.476-5.084-1.31l-.364-.214-3.734.978.995-3.642-.236-.375A9.938 9.938 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+    Contacter sur WhatsApp
+  </a>
+</div>
+
+<!-- FILTRES -->
+<div class="filtres" id="filtres"></div>
+
+<!-- GRILLE -->
+<div class="grille" id="grille"></div>
+
+<!-- PANIER -->
+<button class="panier-btn" id="panierBtn" onclick="ouvrirPanier()">
+  🛒 Mon panier <span class="panier-count" id="panierCount">0</span>
+</button>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script>
+// ─── PRODUITS DEMO
+const PRODUITS = [
+  { id:1, nom:"Crème visage éclat naturel", cat:"Soins visage", prix:5500, prix_promo:null, emoji:"✨", bg:"linear-gradient(135deg,#fff3e0,#ffe0b2)" },
+  { id:2, nom:"Sérum anti-taches vitamine C", cat:"Soins visage", prix:8500, prix_promo:6500, emoji:"🌟", bg:"linear-gradient(135deg,#fff8e1,#fff3cd)" },
+  { id:3, nom:"Huile d'argan pure 100ml", cat:"Huiles & sérums", prix:6000, prix_promo:null, emoji:"💧", bg:"linear-gradient(135deg,#e8f5e9,#c8e6c9)" },
+  { id:4, nom:"Rouge à lèvres mat longue tenue", cat:"Maquillage", prix:3500, prix_promo:2800, emoji:"💄", bg:"linear-gradient(135deg,#fce4ec,#f8bbd0)" },
+  { id:5, nom:"Parfum Rose du Sahel 50ml", cat:"Parfums", prix:9000, prix_promo:null, emoji:"🌸", bg:"linear-gradient(135deg,#f3e5f5,#e1bee7)" },
+  { id:6, nom:"Fond de teint peau noire SPF15", cat:"Maquillage", prix:7500, prix_promo:null, emoji:"🎨", bg:"linear-gradient(135deg,#efebe9,#d7ccc8)" },
+  { id:7, nom:"Perruque lisse naturelle 18\"", cat:"Cheveux & perruques", prix:45000, prix_promo:38000, emoji:"💇", bg:"linear-gradient(135deg,#e8eaf6,#c5cae9)" },
+  { id:8, nom:"Beurre de karité pur 200g", cat:"Soins corps", prix:4500, prix_promo:null, emoji:"🧴", bg:"linear-gradient(135deg,#fffde7,#fff9c4)" },
+  { id:9, nom:"Mascara volume extrême", cat:"Maquillage", prix:4000, prix_promo:3200, emoji:"👁", bg:"linear-gradient(135deg,#e0f7fa,#b2ebf2)" },
+  { id:10, nom:"Lotion corps éclat hibiscus", cat:"Soins corps", prix:5000, prix_promo:null, emoji:"🌺", bg:"linear-gradient(135deg,#fce4ec,#ffcdd2)" },
+];
+
+const CATS = ['Tout', ...new Set(PRODUITS.map(p=>p.cat))];
+let catActive = 'Tout';
+let panier = [];
+
+// RENDER FILTRES
+function renderFiltres(){
+  document.getElementById('filtres').innerHTML = CATS.map(c=>`
+    <button class="filtre ${c===catActive?'actif':''}" onclick="filtrer('${c}')">${c}</button>
+  `).join('');
+}
+
+// RENDER GRILLE
+function renderGrille(){
+  const filtered = catActive==='Tout' ? PRODUITS : PRODUITS.filter(p=>p.cat===catActive);
+  const inPanier = id => panier.find(i=>i.id===id);
+  document.getElementById('grille').innerHTML = filtered.map(p=>`
+    <div class="carte">
+      <div class="carte-img" style="background:${p.bg}">
+        <span>${p.emoji}</span>
+        ${p.prix_promo?'<span class="promo">PROMO</span>':''}
+      </div>
+      <div class="carte-body">
+        <div class="carte-cat">${p.cat}</div>
+        <div class="carte-nom">${p.nom}</div>
+        <div class="carte-prix">
+          <span class="prix-actuel">${fmt(p.prix_promo||p.prix)}</span>
+          ${p.prix_promo?`<span class="prix-barre">${fmt(p.prix)}</span>`:''}
+        </div>
+        <button class="btn-ajouter ${inPanier(p.id)?'ajoute':''}"
+          onclick="ajouterPanier(${p.id})">
+          ${inPanier(p.id)?'✓ Ajouté':'+ Ajouter'}
+        </button>
+      </div>
+    </div>
+  `).join('');
+  majPanierBtn();
+}
+
+function filtrer(cat){catActive=cat;renderFiltres();renderGrille();}
+
+function ajouterPanier(id){
+  const p = PRODUITS.find(x=>x.id===id);
+  const ex = panier.find(x=>x.id===id);
+  if(ex) ex.qte++;
+  else panier.push({...p, qte:1});
+  majPanierBtn();renderGrille();
+}
+
+function majPanierBtn(){
+  const btn = document.getElementById('panierBtn');
+  const count = panier.reduce((s,i)=>s+i.qte,0);
+  document.getElementById('panierCount').textContent = count;
+  btn.style.display = count>0?'flex':'none';
+}
+
+function ouvrirPanier(){
+  const total = panier.reduce((s,i)=>s+i.qte*(i.prix_promo||i.prix),0);
+  document.getElementById('modal').innerHTML = `
+    <div id="panierContent">
+      <div class="modal-titre">Mon panier 🛒</div>
+      <div class="modal-sous">${panier.length} produit(s)</div>
+      ${panier.map(item=>`
+        <div class="panier-item">
+          <div class="pi-emoji">${item.emoji}</div>
+          <div class="pi-info">
+            <div class="pi-nom">${item.nom}</div>
+            <div class="pi-prix">${fmt(item.prix_promo||item.prix)}</div>
+          </div>
+          <div class="pi-ctrl">
+            <button onclick="changeQte(${item.id},-1)">−</button>
+            <span class="pi-qty">${item.qte}</span>
+            <button onclick="changeQte(${item.id},1)">+</button>
+          </div>
+        </div>
+      `).join('')}
+      <div class="total-ligne"><span>Total</span><span>${fmt(total)}</span></div>
+      <div class="fg"><label>Ton prénom & nom *</label>
+        <input type="text" id="cNom" placeholder="Ex: Aminata Diallo"></div>
+      <div class="fg"><label>Ton numéro WhatsApp *</label>
+        <input type="tel" id="cTel" placeholder="77 123 45 67"></div>
+      <div class="fg"><label>Adresse livraison</label>
+        <input type="text" id="cAdresse" placeholder="Quartier, rue..."></div>
+      <div class="fg"><label>Note (optionnel)</label>
+        <textarea id="cNote" placeholder="Couleur, taille..."></textarea></div>
+      <button class="btn-commander" onclick="commander(${total})">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.096.539 4.064 1.482 5.782L.072 23.928l6.284-1.648A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.848 0-3.578-.476-5.084-1.31l-.364-.214-3.734.978.995-3.642-.236-.375A9.938 9.938 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Commander via WhatsApp
+      </button>
+      <button class="btn-annuler" onclick="fermer()">Continuer mes achats</button>
+    </div>
+    <div class="succes" id="succesCommande"></div>
+  `;
+  document.getElementById('overlay').classList.add('open');
+}
+
+function changeQte(id, delta){
+  const item = panier.find(i=>i.id===id);
+  if(!item) return;
+  item.qte += delta;
+  if(item.qte<=0) panier = panier.filter(i=>i.id!==id);
+  majPanierBtn();
+  if(panier.length===0){fermer();renderGrille();return;}
+  ouvrirPanier();
+}
+
+function commander(total){
+  const nom = document.getElementById('cNom').value.trim();
+  const tel = document.getElementById('cTel').value.trim();
+  if(!nom||!tel){alert('Prénom/nom et numéro requis');return;}
+  const adresse = document.getElementById('cAdresse').value;
+  const note = document.getElementById('cNote').value;
+  const ref = 'BP' + Date.now().toString().slice(-8);
+  const lignes = panier.map(i=>`• ${i.nom} ×${i.qte} = ${fmt(i.qte*(i.prix_promo||i.prix))}`).join('\n');
+  const msg = `Bonjour Fatou ! Je souhaite commander :\n${lignes}\n\n💰 Total : ${fmt(total)}\n📍 Livraison : ${adresse||'à confirmer'}\n🔖 Réf : ${ref}${note?'\n📝 '+note:''}`.trim();
+  const waUrl = `https://wa.me/221XXXXXXXXX?text=${encodeURIComponent(msg)}`;
+
+  const succes = document.getElementById('succesCommande');
+  document.getElementById('panierContent').style.display = 'none';
+  succes.className = 'succes show';
+  succes.innerHTML = `
+    <div class="succes-icon">🎉</div>
+    <div class="succes-titre">Commande enregistrée !</div>
+    <div class="succes-ref">Référence : <span>${ref}</span></div>
+    <a href="${waUrl}" target="_blank" class="btn-wa-confirm">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.096.539 4.064 1.482 5.782L.072 23.928l6.284-1.648A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.848 0-3.578-.476-5.084-1.31l-.364-.214-3.734.978.995-3.642-.236-.375A9.938 9.938 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      Envoyer sur WhatsApp
+    </a>
+    <button class="btn-retour" onclick="fermer();panier=[];majPanierBtn();renderGrille()">
+      Retour à la boutique
+    </button>
+  `;
+  panier=[];majPanierBtn();
+}
+
+function fermer(){document.getElementById('overlay').classList.remove('open');}
+document.getElementById('overlay').addEventListener('click',e=>{
+  if(e.target===document.getElementById('overlay'))fermer();
+});
+
+function fmt(n){return Number(n).toLocaleString('fr-FR')+' FCFA';}
+
+// INIT
+renderFiltres();
+renderGrille();
+</script>
+</body>
+</html>
